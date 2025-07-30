@@ -8,8 +8,10 @@ exports.register =  async(req,res)=>{
     const {name, email, password} = req.body
     try{
         const existing = await User.findOne({email});
+        console.log("@@@@@@@@@@@@@@@@2");
         if(existing) return res.status(400),json({message:"User already exists"});
-
+        console.log("JWT_SECRET:");  
+        
         const hashedPasssword = await bcrypt.hash(password,10);
         const user = await User.create({name, email, password: hashedPasssword})
         res.status(201).json({message: "User registered successfully"})
@@ -22,7 +24,9 @@ exports.login = async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
+    console.log("Test");
     if (!user) return res.status(400).json({ message: "Invalid credentials" });
+    console.log("@@@@@@@@@@@@@@@@2");
 
     const match = await bcrypt.compare(password, user.password);
     if (!match) return res.status(400).json({ message: "Invalid credentials" });
